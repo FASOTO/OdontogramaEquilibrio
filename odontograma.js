@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const lienzo6 = document.querySelector('#canvas6');
     const contextoPinta2 = lienzo6.getContext('2d');
 
+    const grupo2 = document.getElementById('grupo2');
+
     let numerosDientes = {
         superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
         inferior: ['48', '47', '46', '45', '44', '43', '42', '41', '31', '32', '33', '34', '35', '36', '37', '38']
@@ -48,26 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     class Procedimento {
         constructor(color, numeroDiente, caraDiente) {
-            this.color = color;
             this.numeroDiente = numeroDiente;
             this.caraDiente = caraDiente;
+            this.color = color;
         }
         limpiar() {
-            this.color = null;
             this.numeroDiente = null;
             this.caraDiente = null;
+            this.color = null;
         }
         guardar() {
             const p = procedimientos.find(p => p.color === this.color && p.numeroDiente === this.numeroDiente && p.caraDiente === this.caraDiente)
 
-            if (p === undefined) {
-
-                return procedimientos.push(new Procedimento(this.color, this.numeroDiente, this.caraDiente))
-            }
-            else {
-                return !procedimientos.splice(procedimientos.indexOf(p), 1)
-            }
-
+            if (p === undefined) return procedimientos.push(new Procedimento(this.color, this.numeroDiente, this.caraDiente))
+            else return !procedimientos.splice(procedimientos.indexOf(p), 1)
         }
     }
 
@@ -77,22 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DESDE ACA EMPIEZA A DIBUJAR- MOSTRAR ESTRUCTURA
     const dibujarEstructura = () => {
-        // estableciendo medidas
         lienzo.width = lienzo2.width = lienzo3.width = contenedorCanvas.parentElement.clientWidth
-        // 2da fila
         lienzo6.width = lienzo5.width= lienzo4.width = contenedorCanvas.parentElement.clientWidth
-        // establecer ancho y alto del contenedor
-        // contenedorCanvas.style.border=' solid 2px #9f3230'
-        // contenedorCanvas.parentElement.style.border=' solid 2px #000'
-
-        // contenedorCanvas.style.border=' solid 2px #000'
-
-        // aca poner el alto del contenedor 
+        
         contenedorCanvas.style.height = contenedorCanvas.parentElement.clientHeight.toString() + 'px'
         lienzo.height = lienzo2.height = lienzo3.height = contenedorCanvas.parentElement.clientHeight
 
         // 2da fila
         lienzo6.height = lienzo5.height = lienzo4.height = contenedorCanvas.parentElement.clientHeight
+
+        grupo2.style.width = '62%'
 
         posEstandar.margenXEntreDientes = (lienzo.width * 8) / 1895
         posEstandar.posicionYDienteInicial = 10//(lienzo.width * 180) / 1895,
@@ -106,21 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
         dimensionesTrapecio.baseMenor = (anchoDiente / 4) * 3
         // hasta aca
 
-        let posicionX;
+        let posX;
         // dibuja estructura dientes 1ra parte
         for (let index = 0; index < 16; index++) {
-            if (index === 0) posicionX = posEstandar.margenXEntreDientes;
-            else posicionX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
-            dibujarDiente(contextoEstructura, posicionX, posEstandar.posicionYDienteInicial)
-            dibujarDiente(contextoEstructura, posicionX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
+            if (index === 0) posX = posEstandar.margenXEntreDientes;
+            else posX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
+            dibujarDiente(contextoEstructura, posX, posEstandar.posicionYDienteInicial)
+            dibujarDiente(contextoEstructura, posX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
         }
 
         // dibuja estructura dientes 2da parte
         for (let index = 0; index < 10; index++) {
-            if (index === 0) posicionX = posEstandar.margenXEntreDientes;
-            else posicionX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
-            dibujarDiente(contextoEstructura2, posicionX, posEstandar.posicionYDienteInicial)
-            dibujarDiente(contextoEstructura2, posicionX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
+            if (index === 0) posX = posEstandar.margenXEntreDientes;
+            else posX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
+            posX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
+            dibujarDiente(contextoEstructura2, posX, posEstandar.posicionYDienteInicial)
+            dibujarDiente(contextoEstructura2, posX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
         }
 
         let posicionYPrimeraParte = (posEstandar.margenYEntreDientes / 5) + anchoDiente + posEstandar.posicionYDienteInicial
@@ -152,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, contexto)
         })
     }
+    
     // dubuja los cuadrados y numero de dientes
     const dibujarCuadradoNumDiente = (cuadrado, contexto) => {
         let tamanoFuente = (40 * (cuadrado.primeroOUltimoDiente ? cuadrado.largo + posEstandar.margenXEntreDientes : cuadrado.largo)) / 118.4375

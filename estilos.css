@@ -7,30 +7,24 @@
     height: 95%;
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
+    align-items: center;
 }
-.grupoCanvas{
+.grupoCanvas1{
     width: 100%;
+    height: 50%;
+}
+.grupoCanvas2{
     height: 50%;
 }
 canvas {
     position: absolute;
 }
-#canvas {
+#canvas, #canvas4{
     z-index: 0;
 }
-#canvas2 {
+#canvas2, #canvas5 {
     z-index: 1;
 }
-#canvas3 {
-    z-index: 2;
-}
-#canvas4 {
-    z-index: 0;
-}
-#canvas5 {
-    z-index: 1;
-}
-#canvas6 {
+#canvas3,#canvas6 {
     z-index: 2;
 }
