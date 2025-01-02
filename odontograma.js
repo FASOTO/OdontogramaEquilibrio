@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const lienzo = document.querySelector('#canvas');
+    const lienzo = document.getElementById('canvas');
     const contextoEstructura = lienzo.getContext('2d');
 
     const lienzo2 = document.querySelector('#canvas2');
@@ -9,7 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextoPinta = lienzo3.getContext('2d');
 
     const contenedorCanvas = document.querySelector('.contenedorCanvas');
-    // contenedorCanvas.style.backgroundColor = 'aqua';
+
+    // 2da parte
+    const lienzo4 = document.getElementById('canvas4');
+    const contextoEstructura2 = lienzo4.getContext('2d');
+
+    const lienzo5 = document.querySelector('#canvas5');
+    const contextoSombrado2 = lienzo5.getContext('2d');
+
+    const lienzo6 = document.querySelector('#canvas6');
+    const contextoPinta2 = lienzo6.getContext('2d');
 
     let numerosDientes = {
         superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
@@ -20,21 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
         inferior: ['85', '84', '83', '82', '81', '71', '72', '73', '74', '75']
     }
     // array con posiciones de los numeros de los dientes. casi que se puede sacar
-    let numeroDienteXOrdenDienteMostrar = new Array()
-    numerosDientes.superior.forEach((numero, index) => numeroDienteXOrdenDienteMostrar[numero] = index)
-    numerosDientes.inferior.forEach((numero, index) => numeroDienteXOrdenDienteMostrar[numero] = index + 16)
-    
-    let numeroDienteXOrdenDienteMostrar2 = new Array()
-    numerosDientes2.superior.forEach((numero, index) => numeroDienteXOrdenDienteMostrar2[numero] = index)
-    numerosDientes2.inferior.forEach((numero, index) => numeroDienteXOrdenDienteMostrar2[numero] = index + 16)
+    let dienteXIndice = new Array()
+    numerosDientes.superior.forEach((numero, index) => dienteXIndice[numero] = index)
+    numerosDientes.inferior.forEach((numero, index) => dienteXIndice[numero] = index + 16)
 
-    let posicionEstandar = {
+    let dienteXIndice2 = new Array()
+    numerosDientes2.superior.forEach((numero, index) => dienteXIndice2[numero] = index)
+    numerosDientes2.inferior.forEach((numero, index) => dienteXIndice2[numero] = index + 16)
+
+    let posEstandar = {
     }
 
     let anchoColumna
     let anchoDiente
 
-    let dimensionesTrapecio = {        
+    let dimensionesTrapecio = {
     }
 
     class Procedimento {
@@ -69,15 +78,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // DESDE ACA EMPIEZA A DIBUJAR- MOSTRAR ESTRUCTURA
     const dibujarEstructura = () => {
         // estableciendo medidas
-        lienzo.width = lienzo2.width = lienzo3.width = contenedorCanvas.clientWidth
-        lienzo.height = lienzo2.height = lienzo3.height = contenedorCanvas.clientHeight
+        lienzo.width = lienzo2.width = lienzo3.width = contenedorCanvas.parentElement.clientWidth
+        // 2da fila
+        lienzo6.width = lienzo5.width= lienzo4.width = contenedorCanvas.parentElement.clientWidth
+        // establecer ancho y alto del contenedor
+        // contenedorCanvas.style.border=' solid 2px #9f3230'
+        // contenedorCanvas.parentElement.style.border=' solid 2px #000'
 
-        posicionEstandar.margenXEntreDientes = (lienzo.width * 8) / 1895
-        posicionEstandar.posicionYDienteInicial = 10//(lienzo.width * 180) / 1895,
-        posicionEstandar.margenYEntreDientes = (lienzo.width * 200) / 2100
-        
+        // contenedorCanvas.style.border=' solid 2px #000'
+
+        // aca poner el alto del contenedor 
+        contenedorCanvas.style.height = contenedorCanvas.parentElement.clientHeight.toString() + 'px'
+        lienzo.height = lienzo2.height = lienzo3.height = contenedorCanvas.parentElement.clientHeight
+
+        // 2da fila
+        lienzo6.height = lienzo5.height = lienzo4.height = contenedorCanvas.parentElement.clientHeight
+
+        posEstandar.margenXEntreDientes = (lienzo.width * 8) / 1895
+        posEstandar.posicionYDienteInicial = 10//(lienzo.width * 180) / 1895,
+        posEstandar.margenYEntreDientes = (lienzo.width * 200) / 2100
+
         anchoColumna = lienzo.width / 16
-        anchoDiente = anchoColumna - (2 * posicionEstandar.margenXEntreDientes)
+        anchoDiente = anchoColumna - (2 * posEstandar.margenXEntreDientes)
 
         dimensionesTrapecio.baseMayor = anchoDiente
         dimensionesTrapecio.lateral = anchoDiente / 4
@@ -85,130 +107,140 @@ document.addEventListener('DOMContentLoaded', () => {
         // hasta aca
 
         let posicionX;
-        // dibuja primero part
+        // dibuja estructura dientes 1ra parte
         for (let index = 0; index < 16; index++) {
-            if (index === 0) posicionX = posicionEstandar.margenXEntreDientes;
-            else posicionX = (index * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * index) + posicionEstandar.margenXEntreDientes;
-            dibujarDiente(posicionX, posicionEstandar.posicionYDienteInicial)
+            if (index === 0) posicionX = posEstandar.margenXEntreDientes;
+            else posicionX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
+            dibujarDiente(contextoEstructura, posicionX, posEstandar.posicionYDienteInicial)
+            dibujarDiente(contextoEstructura, posicionX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
         }
 
-        for (let index = 0; index < 16; index++) {
-            if (index === 0) posicionX = posicionEstandar.margenXEntreDientes;
-            else posicionX = (index * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * index) + posicionEstandar.margenXEntreDientes;
-            dibujarDiente(posicionX, posicionEstandar.margenYEntreDientes + anchoDiente + posicionEstandar.posicionYDienteInicial)
+        // dibuja estructura dientes 2da parte
+        for (let index = 0; index < 10; index++) {
+            if (index === 0) posicionX = posEstandar.margenXEntreDientes;
+            else posicionX = (index * anchoDiente) + (2 * posEstandar.margenXEntreDientes * index) + posEstandar.margenXEntreDientes;
+            dibujarDiente(contextoEstructura2, posicionX, posEstandar.posicionYDienteInicial)
+            dibujarDiente(contextoEstructura2, posicionX, posEstandar.margenYEntreDientes + anchoDiente + posEstandar.posicionYDienteInicial)
         }
 
-        // DIBUJA LOS NUMEROS DE LOS DIENTES
+        let posicionYPrimeraParte = (posEstandar.margenYEntreDientes / 5) + anchoDiente + posEstandar.posicionYDienteInicial
+        let posicionYSegundaParte = posicionYPrimeraParte + (anchoDiente / 1.8)
+
+        dibujarNumeros(contextoEstructura, numerosDientes.superior, posicionYPrimeraParte)
+        dibujarNumeros(contextoEstructura, numerosDientes.inferior, posicionYSegundaParte)
+
+        dibujarNumeros(contextoEstructura2, numerosDientes2.superior, posicionYPrimeraParte) 
+        dibujarNumeros(contextoEstructura2, numerosDientes2.inferior, posicionYSegundaParte)
+    }
+
+    const dibujarNumeros = (contexto, numeros, y) => {
         let posX;
-        numerosDientes.superior.forEach((numero, index) => {
-            if (index === 0) posX = (index * anchoDiente) + posicionEstandar.margenXEntreDientes;
-            else posX = (index * anchoDiente) + (2 * index * posicionEstandar.margenXEntreDientes);
+        
+        numeros.forEach((numero, index) => {
+            if (index === 0) posX = (index * anchoDiente) + posEstandar.margenXEntreDientes;
+            else posX = (index * anchoDiente) + (2 * index * posEstandar.margenXEntreDientes);
 
             dibujarCuadradoNumDiente({
                 posicion: {
                     x: posX,
-                    y: (posicionEstandar.margenYEntreDientes / 5) + anchoDiente + posicionEstandar.posicionYDienteInicial
+                    y: y
                 },
-                primeroOUltimoDiente: index === 0 || index === 15,
+                primeroOUltimoDiente: index === 0 || index === numeros.length - 1 ,
                 numeroDiente: numero,
                 alto: anchoDiente / 1.8,
-                largo: index === 0 || index === 15 ? anchoDiente + posicionEstandar.margenXEntreDientes : anchoDiente + 2 * posicionEstandar.margenXEntreDientes
-            })
+                largo: index === 0 || index === numeros.length - 1 ? anchoDiente + posEstandar.margenXEntreDientes : anchoDiente + 2 * posEstandar.margenXEntreDientes
+            }, contexto)
         })
-
-        numerosDientes.inferior.forEach((numero, index) => {
-            if (index === 0) posX = (index * anchoDiente) + posicionEstandar.margenXEntreDientes;
-            else posX = (index * anchoDiente) + (2 * index * posicionEstandar.margenXEntreDientes);
-
-            dibujarCuadradoNumDiente({
-                posicion: {
-                    x: posX,
-                    y: (posicionEstandar.margenYEntreDientes / 5) + (anchoDiente / 1.8) + anchoDiente + posicionEstandar.posicionYDienteInicial
-                },
-                primeroOUltimoDiente: index === 0 || index === 15,
-                numeroDiente: numero,
-                alto: anchoDiente / 1.8,
-                largo: index === 0 || index === 15 ? anchoDiente + posicionEstandar.margenXEntreDientes : anchoDiente + 2 * posicionEstandar.margenXEntreDientes
-            })
-        })
-
     }
-
     // dubuja los cuadrados y numero de dientes
-    const dibujarCuadradoNumDiente = (cuadrado) => {
-        let tamanoFuente = (40 * (cuadrado.primeroOUltimoDiente ? cuadrado.largo + posicionEstandar.margenXEntreDientes : cuadrado.largo)) / 118.4375
-        contextoEstructura.font = `${tamanoFuente}px arial`
-        contextoEstructura.strokeRect(cuadrado.posicion.x, cuadrado.posicion.y, cuadrado.largo, cuadrado.alto)
-        contextoEstructura.fillText(cuadrado.numeroDiente, cuadrado.posicion.x + anchoDiente / 2.8, cuadrado.posicion.y + (anchoDiente / 2.5));
+    const dibujarCuadradoNumDiente = (cuadrado, contexto) => {
+        let tamanoFuente = (40 * (cuadrado.primeroOUltimoDiente ? cuadrado.largo + posEstandar.margenXEntreDientes : cuadrado.largo)) / 118.4375
+        contexto.font = `${tamanoFuente}px arial`
+        contexto.strokeRect(cuadrado.posicion.x, cuadrado.posicion.y, cuadrado.largo, cuadrado.alto)
+        contexto.fillText(cuadrado.numeroDiente, cuadrado.posicion.x + anchoDiente / 2.8, cuadrado.posicion.y + (anchoDiente / 2.5));
     }
 
-    const dibujarDiente = (posicionX, posicionY) => {
-        contextoEstructura.fillStyle = 'black';
-        contextoEstructura.strokeStyle = 'black';
+    const dibujarDiente = (contexto, posicionX, posicionY) => {
+        contexto.fillStyle = 'black';
+        contexto.strokeStyle = 'black';
 
-        contextoEstructura.beginPath();
-        contextoEstructura.moveTo(posicionX, posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMayor + posicionX, posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.lateral + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.lateral + posicionY);
-        contextoEstructura.closePath();
-        contextoEstructura.stroke();
+        contexto.beginPath();
+        contexto.moveTo(posicionX, posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMayor + posicionX, posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.lateral + posicionY);
+        contexto.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.lateral + posicionY);
+        contexto.closePath();
+        contexto.stroke();
 
-        contextoEstructura.beginPath();
-        contextoEstructura.moveTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.lateral + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMayor + posicionX, posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMayor + posicionX, dimensionesTrapecio.baseMayor + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.baseMenor + posicionY);
-        contextoEstructura.closePath();
-        contextoEstructura.stroke();
+        contexto.beginPath();
+        contexto.moveTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.lateral + posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMayor + posicionX, posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMayor + posicionX, dimensionesTrapecio.baseMayor + posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.baseMenor + posicionY);
+        contexto.closePath();
+        contexto.stroke();
 
-        contextoEstructura.beginPath();
-        contextoEstructura.moveTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.baseMenor + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.baseMenor + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.baseMayor + posicionX, dimensionesTrapecio.baseMayor + posicionY);
-        contextoEstructura.lineTo(posicionX, dimensionesTrapecio.baseMayor + posicionY);
-        contextoEstructura.closePath();
-        contextoEstructura.stroke();
+        contexto.beginPath();
+        contexto.moveTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.baseMenor + posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMenor + posicionX, dimensionesTrapecio.baseMenor + posicionY);
+        contexto.lineTo(dimensionesTrapecio.baseMayor + posicionX, dimensionesTrapecio.baseMayor + posicionY);
+        contexto.lineTo(posicionX, dimensionesTrapecio.baseMayor + posicionY);
+        contexto.closePath();
+        contexto.stroke();
 
-        contextoEstructura.beginPath();
-        contextoEstructura.moveTo(posicionX, posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.lateral + posicionY);
-        contextoEstructura.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.baseMenor + posicionY);
-        contextoEstructura.lineTo(posicionX, dimensionesTrapecio.baseMayor + posicionY);
-        contextoEstructura.closePath();
-        contextoEstructura.stroke();
+        contexto.beginPath();
+        contexto.moveTo(posicionX, posicionY);
+        contexto.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.lateral + posicionY);
+        contexto.lineTo(dimensionesTrapecio.lateral + posicionX, dimensionesTrapecio.baseMenor + posicionY);
+        contexto.lineTo(posicionX, dimensionesTrapecio.baseMayor + posicionY);
+        contexto.closePath();
+        contexto.stroke();
     }
 
-    const dienteSeleccionado = (evento, x, y) => {
+    const dienteSeleccionado = (evento, dientePorOden, lienzo) => {
 
         procedimento.limpiar();
         procedimento.indice = null;
 
-        getPosicionActualDiente(procedimento, evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
+        getPosicionActualDiente(dientePorOden,evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
     }
     // evento onMouse
     lienzo3.onmousemove = (event) => {
 
-        dienteSeleccionado(event)
+        dienteSeleccionado(event, dienteXIndice, lienzo3)
 
-        if (numeroDienteXOrdenDienteMostrar[procedimento.numeroDiente] + 1 > 0) {
+        if (dienteXIndice[procedimento.numeroDiente] + 1 > 0) {
             if (procedimento.caraDiente) {
                 contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
-                sombrearSecccionDiente(numeroDienteXOrdenDienteMostrar[procedimento.numeroDiente] + 1);
+                sombrearSecccionDiente(contextoSombrado, dienteXIndice[procedimento.numeroDiente] + 1);
             } else contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
         } else contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
     }
+    // 2da fila
+    lienzo6.onmousemove = (event) => {
+        
+        dienteSeleccionado(event, dienteXIndice2, lienzo6)
+
+        if (dienteXIndice2[procedimento.numeroDiente] + 1 > 0) {
+            if (procedimento.caraDiente) {
+                contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
+                sombrearSecccionDiente(contextoSombrado2, dienteXIndice2[procedimento.numeroDiente] + 1);
+            } else contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
+        } else contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
+    }
     // PINTO EL DIENTE
     lienzo3.onclick = (event) => {
+        dienteSeleccionado(event, dienteXIndice, lienzo3)
 
-        dienteSeleccionado(event)
+        if (procedimento.guardar()) pintarCaraDiente('#0B80CA', contextoPinta, dienteXIndice[procedimento.numeroDiente])
+        else pintarCaraDiente('#ffffff',contextoPinta, dienteXIndice[procedimento.numeroDiente])   
+    }
 
-        if (procedimento.guardar()) {
-            pintarCaraDiente(procedimento, '#0B80CA')
-        }
-        else {
-            pintarCaraDiente(procedimento, '#ffffff')
-        }
+    lienzo6.onclick = (event) => {
+        dienteSeleccionado(event, dienteXIndice2, lienzo6)
+
+        if (procedimento.guardar()) pintarCaraDiente('#0B80CA',contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
+        else pintarCaraDiente('#ffffff',contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
     }
 
     const pintar = (contexto, posX, posY) => {
@@ -252,76 +284,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // PINTA EL DIENTE
-    const pintarCaraDiente = (procedimento, colorRelleno) => {
-        let numeroDiente = numeroDienteXOrdenDienteMostrar[procedimento.numeroDiente]
-        contextoPinta.fillStyle = colorRelleno
+    const pintarCaraDiente = (colorRelleno, contextoParaPintar, indiceDiente) => {
+        contextoParaPintar.fillStyle = colorRelleno
 
-        let posicionY = 0
+        let posY = 0
 
-        if (numeroDiente < 16) posicionY = posicionEstandar.posicionYDienteInicial;
+        if (indiceDiente < 16) posY = posEstandar.posicionYDienteInicial;
         else {
-            numeroDiente -= 16;
-            posicionY = dimensionesTrapecio.baseMayor + posicionEstandar.margenYEntreDientes + posicionEstandar.posicionYDienteInicial;
+            indiceDiente -= 16;
+            posY = dimensionesTrapecio.baseMayor + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial;
         }
 
-        let posicionX
-        if (numeroDiente === 0) posicionX = posicionEstandar.margenXEntreDientes;
-        else posicionX = (numeroDiente * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * numeroDiente) + posicionEstandar.margenXEntreDientes;
+        let posX
+        if (indiceDiente === 0) posX = posEstandar.margenXEntreDientes;
+        else posX = (indiceDiente * anchoDiente) + (2 * posEstandar.margenXEntreDientes * indiceDiente) + posEstandar.margenXEntreDientes;
 
-        pintar(contextoPinta, posicionX, posicionY)
+        pintar(contextoParaPintar, posX, posY)
     }
 
-    const sombrearSecccionDiente = (ordenVisualizacionDiente) => {
-        contextoSombrado.lineWidth = 2
-        contextoSombrado.fillStyle = '#fff'
+    const sombrearSecccionDiente = (contexto, ordenVisualizacionDiente) => {
+        contexto.lineWidth = 2
+        contexto.fillStyle = '#fff'
         // COLOR DE SOMBREADO
-        contextoSombrado.strokeStyle = '#0B80CA';
+        contexto.strokeStyle = '#0B80CA';
         let posicionY = 0
 
-        if (ordenVisualizacionDiente < 17) posicionY = posicionEstandar.posicionYDienteInicial;
+        if (ordenVisualizacionDiente < 17) posicionY = posEstandar.posicionYDienteInicial;
         else {
             ordenVisualizacionDiente -= 16;
-            posicionY = dimensionesTrapecio.baseMayor + posicionEstandar.margenYEntreDientes + posicionEstandar.posicionYDienteInicial;
+            posicionY = dimensionesTrapecio.baseMayor + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial;
         }
 
         let posicionX
 
-        if (ordenVisualizacionDiente - 1 === 0) posicionX = posicionEstandar.margenXEntreDientes;
-        else posicionX = ((ordenVisualizacionDiente - 1) * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * (ordenVisualizacionDiente - 1)) + posicionEstandar.margenXEntreDientes;
+        if (ordenVisualizacionDiente - 1 === 0) posicionX = posEstandar.margenXEntreDientes;
+        else posicionX = ((ordenVisualizacionDiente - 1) * anchoDiente) + (2 * posEstandar.margenXEntreDientes * (ordenVisualizacionDiente - 1)) + posEstandar.margenXEntreDientes;
 
-        pintar(contextoSombrado, posicionX, posicionY)
+        pintar(contexto, posicionX, posicionY)
     }
 
-    const getPosicionActualDiente = (procedimento, x, y) => {
+    const getPosicionActualDiente = (dientePorOrden, x, y) => {
         // 1ER FILA 
-        if (y >= posicionEstandar.posicionYDienteInicial && y <= posicionEstandar.posicionYDienteInicial + anchoDiente) {
-            if (x >= posicionEstandar.margenXEntreDientes && x <= posicionEstandar.margenXEntreDientes + anchoDiente)
-                procedimento.numeroDiente = numeroDienteXOrdenDienteMostrar.indexOf(0)
+        if (y >= posEstandar.posicionYDienteInicial && y <= posEstandar.posicionYDienteInicial + anchoDiente) {
+            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente)
+                procedimento.numeroDiente = dientePorOrden.indexOf(0)
             // cambie por 2, estaba por 3
-            else if (x >= (anchoDiente + posicionEstandar.margenXEntreDientes * 2) && x <= (30 * posicionEstandar.margenXEntreDientes + 16 * anchoDiente)) {
-                procedimento.indice = parseInt(x / (anchoDiente + 2 * posicionEstandar.margenXEntreDientes), 10);
-                ini = (procedimento.indice * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * procedimento.indice) + posicionEstandar.margenXEntreDientes;
+            else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 2) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
+                procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
+                ini = (procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes;
                 fin = ini + anchoDiente;
                 if (x >= ini && x <= fin) {
-                    procedimento.numeroDiente = numeroDienteXOrdenDienteMostrar.indexOf(procedimento.indice)
+                    procedimento.numeroDiente = dientePorOrden.indexOf(procedimento.indice)
                 }
             }
         }
-        else if (y >= (anchoDiente + posicionEstandar.margenYEntreDientes + posicionEstandar.posicionYDienteInicial) && y <= (2 * anchoDiente + posicionEstandar.margenYEntreDientes + posicionEstandar.posicionYDienteInicial)) {
-            if (x >= posicionEstandar.margenXEntreDientes && x <= posicionEstandar.margenXEntreDientes + anchoDiente) {
-                procedimento.numeroDiente = numeroDienteXOrdenDienteMostrar.indexOf(16)
-            } else if (x >= (anchoDiente + posicionEstandar.margenXEntreDientes * 3) && x <= (30 * posicionEstandar.margenXEntreDientes + 16 * anchoDiente)) {
-                procedimento.indice = parseInt(x / (anchoDiente + 2 * posicionEstandar.margenXEntreDientes), 10);
-                ini = (procedimento.indice * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * procedimento.indice) + posicionEstandar.margenXEntreDientes;
+        else if (y >= (anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial) && y <= (2 * anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial)) {
+            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente) {
+                procedimento.numeroDiente = dientePorOrden.indexOf(16)
+            } else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 3) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
+                procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
+                ini = (procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes;
                 fin = ini + anchoDiente;
-                if (x >= ini && x <= fin) procedimento.numeroDiente = numeroDienteXOrdenDienteMostrar.indexOf(procedimento.indice + 16)
+                if (x >= ini && x <= fin) procedimento.numeroDiente = dientePorOrden.indexOf(procedimento.indice + 16)
             }
         }
 
-        let px = x - ((procedimento.indice * anchoDiente) + (2 * posicionEstandar.margenXEntreDientes * procedimento.indice) + posicionEstandar.margenXEntreDientes)
-        let py = y - posicionEstandar.posicionYDienteInicial
+        let px = x - ((procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes)
+        let py = y - posEstandar.posicionYDienteInicial
 
-        if (numeroDienteXOrdenDienteMostrar[procedimento.numeroDiente] + 1 > 16) py -= (posicionEstandar.margenYEntreDientes + anchoDiente)
+        if (dientePorOrden[procedimento.numeroDiente] + 1 > 16) py -= (posEstandar.margenYEntreDientes + anchoDiente)
 
         if (py > 0 && py < (anchoDiente / 4) && px > py && py < anchoDiente - px) {
             procedimento.caraDiente = 1;
@@ -339,5 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener("resize", () => {
         dibujarEstructura()
     })
+
     dibujarEstructura();
 })
