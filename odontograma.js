@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lienzo3 = document.querySelector('#canvas3');
     const contextoPinta = lienzo3.getContext('2d');
 
-    const contenedorCanvas = document.querySelector('.contenedorCanvas');
+    const contenedorCanvas = document.getElementById('contenedorCanvas');
 
     // 2da parte
     const lienzo4 = document.getElementById('canvas4');
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextoPinta2 = lienzo6.getContext('2d');
 
     const grupo2 = document.getElementById('grupo2');
+    const grupo1 = document.getElementById('grupo1');
 
     let numerosDientes = {
         superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
@@ -73,20 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DESDE ACA EMPIEZA A DIBUJAR- MOSTRAR ESTRUCTURA
     const dibujarEstructura = () => {
-        lienzo.width = lienzo2.width = lienzo3.width = contenedorCanvas.parentElement.clientWidth
-        lienzo6.width = lienzo5.width= lienzo4.width = contenedorCanvas.parentElement.clientWidth
+        lienzo.width = lienzo2.width = lienzo3.width = grupo1.clientWidth
+        lienzo6.width = lienzo5.width= lienzo4.width = grupo2.clientWidth
+      
+        const altura = parseInt((lienzo.width * 872) / 1895/2)
+
+        grupo1.style.height = altura.toString() + 'px'
+        grupo2.style.height = altura.toString() + 'px'
+
+        lienzo.height = lienzo2.height = lienzo3.height = altura
+        lienzo6.height = lienzo5.height = lienzo4.height = altura
         
-        contenedorCanvas.style.height = contenedorCanvas.parentElement.clientHeight.toString() + 'px'
-        lienzo.height = lienzo2.height = lienzo3.height = contenedorCanvas.parentElement.clientHeight
-
-        // 2da fila
-        lienzo6.height = lienzo5.height = lienzo4.height = contenedorCanvas.parentElement.clientHeight
-
-        grupo2.style.width = '62%'
-
         posEstandar.margenXEntreDientes = (lienzo.width * 8) / 1895
-        posEstandar.posicionYDienteInicial = 10//(lienzo.width * 180) / 1895,
-        posEstandar.margenYEntreDientes = (lienzo.width * 200) / 2100
+        posEstandar.posicionYDienteInicial = 10
+        posEstandar.margenYEntreDientes = (lienzo.width * 200) / 2300
 
         anchoColumna = lienzo.width / 16
         anchoDiente = anchoColumna - (2 * posEstandar.margenXEntreDientes)
