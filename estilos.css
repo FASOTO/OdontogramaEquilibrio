@@ -5,13 +5,16 @@
 .contenedorCanvas{
     height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-content: flex-start;
 }
 .grupoCanvas1{
     width: 100%;
 }
 .grupoCanvas2{
+    margin-top: 0;
     width: 63%;
 }
 canvas {
@@ -26,3 +29,38 @@ canvas {
 #canvas3, #canvas6 {
     z-index: 2;
 }
+.opciones{
+    width: 17%;
+    border: 2px solid #000;
+    border-radius: 3px;
+}
+.colores{
+    padding: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.formColores input[type="radio"]{
+    display: none;
+}
+.labelColor{
+    background: rgba(249, 160, 63, .4);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    width: 35%;
+    border-radius: 3px;
+}
+.rojo{
+    background: rgba(245, 11, 11, .4);
+}
+.azul{
+    background: rgba(0, 115, 187, .4);
+}
+
+.formColores input[type="radio"]:checked + .rojo{
+    background: #F50B0B;
+}
+.formColores input[type="radio"]:checked + .azul{
+    background: #0073BB;
+} 

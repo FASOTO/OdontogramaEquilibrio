@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const grupo2 = document.getElementById('grupo2');
     const grupo1 = document.getElementById('grupo1');
 
+    // opcion de color
+    const colorRojo = '#F50B0B'
+    const colorAzul = '#0073BB'
+    const radioColorRojo = document.getElementById ('inputColorRojo')
+    radioColorRojo.checked = true
+
     let numerosDientes = {
         superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
         inferior: ['48', '47', '46', '45', '44', '43', '42', '41', '31', '32', '33', '34', '35', '36', '37', '38']
@@ -225,15 +231,23 @@ document.addEventListener('DOMContentLoaded', () => {
     lienzo3.onclick = (event) => {
         dienteSeleccionado(event, dienteXIndice, lienzo3)
 
-        if (procedimento.guardar()) pintarCaraDiente('#0B80CA', contextoPinta, dienteXIndice[procedimento.numeroDiente])
-        else pintarCaraDiente('#ffffff',contextoPinta, dienteXIndice[procedimento.numeroDiente])   
+        let colorPinta
+        if (!procedimento.guardar()) colorPinta = '#ffffff'
+        else if (radioColorRojo.checked == true) colorPinta = colorRojo
+        else colorPinta = colorAzul
+
+        pintarCaraDiente(colorPinta,contextoPinta, dienteXIndice[procedimento.numeroDiente])   
     }
 
     lienzo6.onclick = (event) => {
         dienteSeleccionado(event, dienteXIndice2, lienzo6)
 
-        if (procedimento.guardar()) pintarCaraDiente('#0B80CA',contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
-        else pintarCaraDiente('#ffffff',contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
+        let colorPinta
+        if (!procedimento.guardar()) colorPinta = '#ffffff'
+        else if (radioColorRojo.checked == true) colorPinta = colorRojo
+        else colorPinta = colorAzul
+
+        pintarCaraDiente(colorPinta,contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
     }
 
     const pintar = (contexto, posX, posY) => {
