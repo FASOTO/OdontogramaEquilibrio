@@ -1,3 +1,6 @@
+*{
+    box-sizing: border-box;
+}
 .contenedorExterno{
     width: 98%;
     height: 570px;
@@ -44,11 +47,11 @@ canvas {
     display: none;
 }
 .labelColor{
-    background: rgba(249, 160, 63, .4);
+    /* background: rgba(249, 160, 63, .4); */
     color: #fff;
     padding: 10px;
     text-align: center;
-    width: 35%;
+    width: 48%;
     border-radius: 3px;
 }
 .rojo{
