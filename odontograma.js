@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorRojo = '#F50B0B'
     const colorAzul = '#0073BB'
     const radioColorRojo = document.getElementById ('inputColorRojo')
-    radioColorRojo.checked = true
 
     let numerosDientes = {
         superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
