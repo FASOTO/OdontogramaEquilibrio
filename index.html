@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="odontograma.js"></script>
-    <link rel="stylesheet" href="estilosOdontograma.css">
+
     <title>Odontograma Equilibrio</title>
     <link rel="stylesheet" href="bootstrap.min.css">
 </head>
@@ -14,14 +13,14 @@
     <div class="container">
         <div class="row justify-content-end">
             <div class="col-12" id="grupo1">
-                <canvas id="canvas"></canvas>
-                <canvas id="canvas2"></canvas>
-                <canvas id="canvas3"></canvas>
+                <canvas id="canvas1" class="position-absolute z-0"></canvas>
+                <canvas id="canvas2" class="position-absolute z-1"></canvas>
+                <canvas id="canvas3" class="position-absolute z-2"></canvas>
             </div>
             <div class="col-8" id="grupo2">
-                <canvas id="canvas4"></canvas>
-                <canvas id="canvas5"></canvas>
-                <canvas id="canvas6"></canvas>
+                <canvas id="canvas4" class="position-absolute z-0"></canvas>
+                <canvas id="canvas5" class="position-absolute z-1"></canvas>
+                <canvas id="canvas6" class="position-absolute z-2"></canvas>
             </div>
             <div class="col-2">
                 <input type="radio" class="btn-check" name="opcionColor" id="inputColorAzul" autocomplete="off" checked>
@@ -33,6 +32,7 @@
         </div>
     </div>
     <script src="bootstrap.bundle.min.js"></script>
+    <script src="odontograma.js"></script>
 </body>
 
 </html>

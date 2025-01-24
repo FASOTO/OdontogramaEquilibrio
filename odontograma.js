@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const lienzo = document.getElementById('canvas');
+    const lienzo = document.getElementById('canvas1');
     const contextoEstructura = lienzo.getContext('2d');
 
     const lienzo2 = document.querySelector('#canvas2');
@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const lienzo3 = document.querySelector('#canvas3');
     const contextoPinta = lienzo3.getContext('2d');
-
-    const contenedorCanvas = document.getElementById('contenedorCanvas');
 
     // 2da parte
     const lienzo4 = document.getElementById('canvas4');
@@ -65,11 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
             this.caraDiente = null;
             this.color = null;
         }
+        valido() {
+            if (this.numeroDiente === null || this.numeroDiente < 0) return false
+            return true
+        }
         guardar() {
-            const p = procedimientos.find(p => p.color === this.color && p.numeroDiente === this.numeroDiente && p.caraDiente === this.caraDiente)
+            if (this.valido()) {
+                const p = procedimientos.find(p => p.numeroDiente === this.numeroDiente && p.caraDiente === this.caraDiente)
 
-            if (p === undefined) return procedimientos.push(new Procedimento(this.color, this.numeroDiente, this.caraDiente))
-            else return !procedimientos.splice(procedimientos.indexOf(p), 1)
+                if (p === undefined) return procedimientos.push(new Procedimento(this.color, this.numeroDiente, this.caraDiente))
+                else return !procedimientos.splice(procedimientos.indexOf(p), 1)
+            }
         }
     }
 
@@ -128,6 +132,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dibujarNumeros(contextoEstructura2, numerosDientes2.superior, posicionYPrimeraParte) 
         dibujarNumeros(contextoEstructura2, numerosDientes2.inferior, posicionYSegundaParte)
+        dibujarProcedimientosExistentes()
+
+    }
+
+    const dibujarProcedimientosExistentes = () => {
+
+        procedimientos.forEach(elemento => {
+            procedimento.caraDiente = elemento.caraDiente
+            procedimento.numeroDiente = elemento.numeroDiente
+            if (elemento.numeroDiente < 50) {
+                pintarCaraDiente(elemento.color, contextoPinta, dienteXIndice[elemento.numeroDiente])
+            }
+            else pintarCaraDiente(elemento.color, contextoPinta2, dienteXIndice2[elemento.numeroDiente])
+
+        });
     }
 
     const dibujarNumeros = (contexto, numeros, y) => {
@@ -199,6 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         procedimento.limpiar();
         procedimento.indice = null;
+        if (radioColorRojo.checked == true) procedimento.color = colorRojo
+        else procedimento.color = colorAzul
 
         getPosicionActualDiente(dientePorOden,evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
     }
@@ -232,8 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let colorPinta
         if (!procedimento.guardar()) colorPinta = '#ffffff'
-        else if (radioColorRojo.checked == true) colorPinta = colorRojo
-        else colorPinta = colorAzul
+        else colorPinta = procedimento.color
 
         pintarCaraDiente(colorPinta,contextoPinta, dienteXIndice[procedimento.numeroDiente])   
     }
@@ -243,8 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let colorPinta
         if (!procedimento.guardar()) colorPinta = '#ffffff'
-        else if (radioColorRojo.checked == true) colorPinta = colorRojo
-        else colorPinta = colorAzul
+        else colorPinta = procedimento.color
 
         pintarCaraDiente(colorPinta,contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
     }
