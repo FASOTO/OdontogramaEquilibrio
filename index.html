@@ -2,37 +2,83 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Odontograma Equilibrio</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
+  <title>Odontograma Equilibrio</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-12" id="grupo1">
-                <canvas id="canvas1" class="position-absolute z-0"></canvas>
-                <canvas id="canvas2" class="position-absolute z-1"></canvas>
-                <canvas id="canvas3" class="position-absolute z-2"></canvas>
-            </div>
-            <div class="col-8" id="grupo2">
-                <canvas id="canvas4" class="position-absolute z-0"></canvas>
-                <canvas id="canvas5" class="position-absolute z-1"></canvas>
-                <canvas id="canvas6" class="position-absolute z-2"></canvas>
-            </div>
-            <div class="col-2">
-                <input type="radio" class="btn-check" name="opcionColor" id="inputColorAzul" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="inputColorAzul">Azul</label>
-    
-                <input type="radio" class="btn-check" name="opcionColor" id="inputColorRojo" autocomplete="off">
-                <label class="btn btn-outline-danger" for="inputColorRojo">Rojo</label>
-            </div>
+  <div class="container">
+    <div class="row justify-content-end">
+      <div class="col-12" id="grupo1">
+        <canvas id="canvas1" class="position-absolute z-0"></canvas>
+        <canvas id="canvas2" class="position-absolute z-1"></canvas>
+        <canvas id="canvas3" class="position-absolute z-2"></canvas>
+      </div>
+      <div class="col-2">
+        <h4>Colores</h4>
+        <input type="radio" class="btn-check" name="opcionColor" id="inputColorAzul" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="inputColorAzul">Azul</label>
+
+        <input type="radio" class="btn-check" name="opcionColor" id="inputColorRojo" autocomplete="off">
+        <label class="btn btn-outline-danger" for="inputColorRojo">Rojo</label>
+        <br>
+        <span>altura:</span>
+        <strong id="numeroDiente">numero</strong>
+        <br>
+        <span>ancho:</span>
+        <strong id="caraDiente">cara</strong>
+      </div>
+      <div class="col-8" id="grupo2">
+        <canvas id="canvas4" class="position-absolute z-0"></canvas>
+        <canvas id="canvas5" class="position-absolute z-1"></canvas>
+        <canvas id="canvas6" class="position-absolute z-2"></canvas>
+      </div>
+      <div class="col-2">
+        <h4>Procedimiento</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarRelleno" value="opcionPintarRelleno">
+          <label class="form-check-label" for="opcionPintarRelleno">
+            Pintar
+          </label>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarX" value="opcionPintarX">
+          <label class="form-check-label" for="opcionPintarX">
+            X
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarCirculo" value="opcionPintarCirculo" >
+          <label class="form-check-label" for="opcionPintarCirculo">
+            O (circulo)
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarE" value="opcionPintarE" checked >
+          <label class="form-check-label" for="opcionPintarE">
+            E (Endodoncia)
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarY" value="opcionPintarY" >
+          <label class="form-check-label" for="opcionPintarY">
+            Y ()
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="opcionPintar" id="opcionPintarMedio" value="opcionPintarMedio" >
+          <label class="form-check-label" for="opcionPintarMedio">
+            - (desgaste)
+          </label>
+        </div>
+      </div>
     </div>
-    <script src="bootstrap.bundle.min.js"></script>
-    <script src="odontograma.js"></script>
+  </div>
+  <script src="bootstrap.bundle.min.js"></script>
+  <script src="odontograma.js"></script>
 </body>
 
 </html>
