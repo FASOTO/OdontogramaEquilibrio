@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.tipoProcedimiento = null;
         }
         valido() {
-            if (this.numeroDiente === null || this.numeroDiente < 0) return false
+            if (this.numeroDiente === null || this.numeroDiente < 0 || this.numeroDiente === undefined) return false
             return true
         }
         guardar() {
@@ -88,18 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
         lienzo.width = lienzo2.width = lienzo3.width = grupo1.clientWidth
         lienzo6.width = lienzo5.width = lienzo4.width = grupo2.clientWidth
 
-        // grupo1.style.border ='2px solid #000342'
-        // lienzo.style.border = '2px solid #051f54'
-        // lienzo4.style.border ='2px solid #051f54'
         const altura = parseInt((lienzo.width * 872) / 1895 / 1.6)
 
         grupo1.style.height = altura.toString() + 'px'
         grupo2.style.height = altura.toString() + 'px'
-
-        let num = document.getElementById('numeroDiente')
-        let cara = document.getElementById('caraDiente')
-        num.innerHTML = altura
-        cara.innerHTML = grupo1.clientWidth
 
         lienzo.height = lienzo2.height = lienzo3.height = altura
         lienzo6.height = lienzo5.height = lienzo4.height = altura
@@ -234,10 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (procedimento.tipoProcedimiento == 'opcionPintarRelleno') procedimento.caraDiente = getCaraDiente(dientePorOden, evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
         else procedimento.caraDiente = 6
 
-        // let num = document.getElementById('numeroDiente')
-        // let cara = document.getElementById('caraDiente')
-        // num.innerHTML = procedimento.numeroDiente
-        // cara.innerHTML = procedimento.caraDiente
     }
     // evento onMouse
     lienzo3.onmousemove = (event) => {
@@ -267,11 +255,13 @@ document.addEventListener('DOMContentLoaded', () => {
     lienzo3.onclick = (event) => {
         dienteSeleccionado(event, dienteXIndice, lienzo3)
 
-        if (procedimento.guardar()) {
-            dibujar(contextoPinta, dienteXIndice[procedimento.numeroDiente])
-        } else {
-            contextoPinta.clearRect(0, 0, lienzo.width, lienzo.height)
-            dibujarProcedimientosExistentes();
+        if (procedimento.indice != null){
+            if (procedimento.guardar()) {
+                dibujar(contextoPinta, dienteXIndice[procedimento.numeroDiente])
+            } else {
+                contextoPinta.clearRect(0, 0, lienzo.width, lienzo.height)
+                dibujarProcedimientosExistentes();
+            }
         }
     }
 
@@ -312,11 +302,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 pintandoMedio(contexto, posX, posY)
                 break;
             case 'opcionPintarE':
-                if (indiceDienteParam < 16) pintandoLetra(contexto, posX, posY + anchoDiente +anchoDiente/2.7, 'E', 'end')
+                if (indiceDienteParam < 16) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, 'E', 'end')
                 else pintandoLetra(contexto, posX, posY - posEstandar.margenXEntreDientes, 'E', 'end')
                 break;
             case 'opcionPintarY':
-                if (indiceDienteParam < 16 ) pintandoLetra(contexto, posX, posY + anchoDiente +anchoDiente/2.7, ' Y', 'start')
+                if (indiceDienteParam < 16) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, ' Y', 'start')
                 else pintandoLetra(contexto, posX, posY - posEstandar.margenXEntreDientes, ' Y', 'start')
                 break;
             case 'opcionPintarRelleno':
@@ -324,9 +314,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 contexto.strokeStyle = 'black'
                 pintar(contexto, posX, posY)
                 break;
+            case 'opcionPintarDiente':
+                if (indiceDienteParam < 16) pintandoImagen(contexto, posX + anchoDiente / 2.3, posY - anchoDiente / 1.5)
+                else pintandoImagen(contexto, posX + anchoDiente / 2.3, posY + anchoDiente)
+                break
+                ;
         }
     }
+    const pintandoImagen = (contexto, posX, posY) => {
+        let imagen = new Image();
+        imagen.src = '18.png'
+        contexto.drawImage(imagen, posX, posY, anchoDiente / 3, anchoDiente / 1.5)
 
+
+    }
     const pintandoLetra = (contexto, posX, posY, letra, alinear) => {
         let tamanoFuente = anchoDiente / 2.5
         contexto.font = `${tamanoFuente}px arial`
