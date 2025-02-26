@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         grupo1.style.height = altura.toString() + 'px'
         grupo2.style.height = altura.toString() + 'px'
-
+        
         lienzo.height = lienzo2.height = lienzo3.height = altura
         lienzo6.height = lienzo5.height = lienzo4.height = altura
 
@@ -438,8 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function getNumeroDiente(dientePorOrden, x, y) {
         if (y >= posEstandar.posicionYDienteInicial && y <= posEstandar.posicionYDienteInicial + anchoDiente) {
-            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente)
+            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente){
+                procedimento.indice = 0;
                 return dientePorOrden.indexOf(0)
+            }
             // cambie por 2, estaba por 3
             else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 2) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
                 procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
@@ -452,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (y >= (anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial) && y <= (2 * anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial)) {
             if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente) {
+                procedimento.indice = 0;
                 return dientePorOrden.indexOf(16)
             } else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 3) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
                 procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
