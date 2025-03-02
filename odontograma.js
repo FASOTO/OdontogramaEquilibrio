@@ -1,4 +1,5 @@
 import { NumerosDientes } from "./NumerosDientes.js";
+import { Procedimiento } from "./Procedimiento.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const lienzo = document.getElementById('canvas1');
@@ -28,24 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorAzul = '#0073BB'
     const radioColorRojo = document.getElementById('inputColorRojo')
 
-    const numerosDeDientes = new NumerosDientes()
-
-    let numerosDientes = {
-        superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
-        inferior: ['48', '47', '46', '45', '44', '43', '42', '41', '31', '32', '33', '34', '35', '36', '37', '38']
-    }
-    let numerosDientes2 = {
-        superior: ['55', '54', '53', '52', '51', '61', '62', '63', '64', '65'],
-        inferior: ['85', '84', '83', '82', '81', '71', '72', '73', '74', '75']
-    }
-    // array con posiciones de los numeros de los dientes. casi que se puede sacar
-    let dienteXIndice = new Array()
-    numerosDientes.superior.forEach((numero, index) => dienteXIndice[numero] = index)
-    numerosDientes.inferior.forEach((numero, index) => dienteXIndice[numero] = index + 16)
-
-    let dienteXIndice2 = new Array()
-    numerosDientes2.superior.forEach((numero, index) => dienteXIndice2[numero] = index)
-    numerosDientes2.inferior.forEach((numero, index) => dienteXIndice2[numero] = index + 16)
+    const numerosDientes = new NumerosDientes()
 
     let posEstandar = {
     }
@@ -55,37 +39,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let dimensionesTrapecio = {
     }
+    let procedimientos = []
+    let procedimentoSeleccionado = new Procedimiento
+    procedimentoSeleccionado.indice = null;
+    procedimentoSeleccionado.cuadroSeleccionado = null;
 
-    class Procedimento {
-        constructor(color, numeroDiente, caraDiente, tipoProcedimiento) {
-            this.numeroDiente = numeroDiente;
-            this.caraDiente = caraDiente;
-            this.color = color;
-            this.tipoProcedimiento = tipoProcedimiento;
-        }
-        limpiar() {
-            this.numeroDiente = null;
-            this.caraDiente = null;
-            this.color = null;
-            this.tipoProcedimiento = null;
-        }
-        valido() {
-            if (this.numeroDiente === null || this.numeroDiente < 0 || this.numeroDiente === undefined) return false
-            return true
-        }
-        guardar() {
-            if (this.valido()) {
-                const p = procedimientos.find(p => p.numeroDiente === this.numeroDiente && p.caraDiente === this.caraDiente && p.tipoProcedimiento === this.tipoProcedimiento)
-
-                if (p === undefined) return procedimientos.push(new Procedimento(this.color, this.numeroDiente, this.caraDiente, this.tipoProcedimiento))
-                else return !procedimientos.splice(procedimientos.indexOf(p), 1)
-            }
-        }
+    function limpiarDienteSeleccionado() {
+        procedimentoSeleccionado.numeroDiente = null;
+        procedimentoSeleccionado.caraDiente = null;
+        procedimentoSeleccionado.color = null;
+        procedimentoSeleccionado.tipoProcedimiento = null;
     }
 
-    let procedimientos = [];
-    let procedimento = new Procedimento()
-    procedimento.indice = null;
+    function guardarDienteSeleccionado() {
+        if (!(procedimentoSeleccionado.numeroDiente === null || procedimentoSeleccionado.numeroDiente < 0 || procedimentoSeleccionado.numeroDiente === undefined)) {
+            const p = procedimientos.find(p => p.numeroDiente === procedimentoSeleccionado.numeroDiente && p.caraDiente === procedimentoSeleccionado.caraDiente
+                && p.tipoProcedimiento === procedimentoSeleccionado.tipoProcedimiento)
+            if (p === undefined) {
+                return procedimientos.push(new Procedimiento(procedimentoSeleccionado.numeroDiente, procedimentoSeleccionado.caraDiente, procedimentoSeleccionado.tipoProcedimiento, procedimentoSeleccionado.color))
+            }
+            else return !procedimientos.splice(procedimientos.indexOf(p), 1)
+        }
+    }
 
     // DESDE ACA EMPIEZA A DIBUJAR- MOSTRAR ESTRUCTURA
     const dibujarEstructura = () => {
@@ -134,22 +109,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let posYLetras1 = (posEstandar.margenYEntreDientes / 4) + anchoDiente + posEstandar.posicionYDienteInicial
         let posYLetras2 = posYLetras1 + (anchoDiente / 2)
 
-        dibujarNumeros(contextoEstructura, numerosDeDientes.primero, posYLetras1)
-        dibujarNumeros(contextoEstructura, numerosDeDientes.segundo, posYLetras2)
+        dibujarNumeros(contextoEstructura, numerosDientes.primero, posYLetras1)
+        dibujarNumeros(contextoEstructura, numerosDientes.segundo, posYLetras2)
 
-        dibujarNumeros(contextoEstructura2, numerosDeDientes.tercero, posYLetras1)
-        dibujarNumeros(contextoEstructura2, numerosDeDientes.cuarto, posYLetras2)
+        dibujarNumeros(contextoEstructura2, numerosDientes.tercero, posYLetras1)
+        dibujarNumeros(contextoEstructura2, numerosDientes.cuarto, posYLetras2)
         dibujarProcedimientosExistentes()
     }
 
     const dibujarProcedimientosExistentes = () => {
         procedimientos.forEach(elemento => {
-            procedimento.caraDiente = elemento.caraDiente
-            procedimento.numeroDiente = elemento.numeroDiente
-            procedimento.tipoProcedimiento = elemento.tipoProcedimiento
-            procedimento.color = elemento.color
-            if (elemento.numeroDiente < 50) dibujar(contextoPinta, numerosDeDientes.getIndice(elemento.numeroDiente))
-            else dibujar(contextoPinta2, numerosDeDientes.getIndice(elemento.numeroDiente))
+            procedimentoSeleccionado.caraDiente = elemento.caraDiente
+            procedimentoSeleccionado.numeroDiente = elemento.numeroDiente
+            procedimentoSeleccionado.tipoProcedimiento = elemento.tipoProcedimiento
+            procedimentoSeleccionado.color = elemento.color
+            procedimentoSeleccionado.indice = numerosDientes.getIndice(elemento.numeroDiente)
+            if (elemento.numeroDiente < 50) dibujar(contextoPinta)
+            else dibujar(contextoPinta2)
         });
     }
 
@@ -218,51 +194,52 @@ document.addEventListener('DOMContentLoaded', () => {
         contexto.stroke();
     }
 
-    const dienteSeleccionado = (evento, dientePorOden, lienzo) => {
+    const dienteSeleccionado = (evento, lienzo) => {
 
-        procedimento.limpiar();
-        // procedimento.indice = null;
-        // procedimento.indice = numerosDeDientes.getIndice;
-        if (radioColorRojo.checked == true) procedimento.color = colorRojo
-        else procedimento.color = colorAzul
+        limpiarDienteSeleccionado();
 
-        procedimento.numeroDiente = getNumeroDiente(dientePorOden, evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
-        procedimento.tipoProcedimiento = getTipoProcedimiento()
-        if (procedimento.tipoProcedimiento == 'opcionPintarRelleno') procedimento.caraDiente = getCaraDiente(dientePorOden, evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
-        else procedimento.caraDiente = 6
+        if (radioColorRojo.checked == true ? procedimentoSeleccionado.color = colorRojo : procedimentoSeleccionado.color = colorAzul);
+
+        establecerDienteSeleccionado(evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
+        procedimentoSeleccionado.tipoProcedimiento = getTipoProcedimiento()
+        if (procedimentoSeleccionado.tipoProcedimiento == 'opcionPintarRelleno') procedimentoSeleccionado.caraDiente = getCaraDiente(evento.x - lienzo.offsetLeft, evento.y - lienzo.offsetTop)
+        else procedimentoSeleccionado.caraDiente = 6
 
     }
     // evento onMouse
     lienzo3.onmousemove = (event) => {
+        procedimentoSeleccionado.cuadroSeleccionado = 1
 
-        dienteSeleccionado(event, dienteXIndice, lienzo3)
+        dienteSeleccionado(event, lienzo3)
 
-        if (dienteXIndice[procedimento.numeroDiente]  >= 0) {
-            if (procedimento.caraDiente) {
+        if (numerosDientes.getIndice(procedimentoSeleccionado.numeroDiente) >= 0) {
+            if (procedimentoSeleccionado.caraDiente) {
                 contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
-                sombrearSecccionDiente(contextoSombrado, dienteXIndice[procedimento.numeroDiente] + 1);
+                sombrearSecccionDiente(contextoSombrado);
             } else contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
         } else contextoSombrado.clearRect(0, 0, lienzo.width, lienzo.height)
     }
     // 2da fila
     lienzo6.onmousemove = (event) => {
+        procedimentoSeleccionado.cuadroSeleccionado = 2
 
-        dienteSeleccionado(event, dienteXIndice2, lienzo6)
+        dienteSeleccionado(event, lienzo6)
 
-        if (dienteXIndice2[procedimento.numeroDiente] >= 0) {
-            if (procedimento.caraDiente) {
+        if (numerosDientes.getIndice(procedimentoSeleccionado.numeroDiente) >= 0) {
+            if (procedimentoSeleccionado.caraDiente) {
                 contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
-                sombrearSecccionDiente(contextoSombrado2, dienteXIndice2[procedimento.numeroDiente] + 1);
+                sombrearSecccionDiente(contextoSombrado2);
             } else contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
         } else contextoSombrado2.clearRect(0, 0, lienzo5.width, lienzo5.height)
     }
     // PINTO EL DIENTE
     lienzo3.onclick = (event) => {
-        dienteSeleccionado(event, dienteXIndice, lienzo3)
+        procedimentoSeleccionado.cuadroSeleccionado = 1
+        dienteSeleccionado(event, lienzo3)
 
-        if (procedimento.indice != null) {
-            if (procedimento.guardar()) {
-                dibujar(contextoPinta, dienteXIndice[procedimento.numeroDiente])
+        if (procedimentoSeleccionado.indice != null) {
+            if (guardarDienteSeleccionado()) {
+                dibujar(contextoPinta)
             } else {
                 contextoPinta.clearRect(0, 0, lienzo.width, lienzo.height)
                 dibujarProcedimientosExistentes();
@@ -271,32 +248,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     lienzo6.onclick = (event) => {
-        dienteSeleccionado(event, dienteXIndice2, lienzo6)
+        procedimentoSeleccionado.cuadroSeleccionado = 2
+        dienteSeleccionado(event, lienzo6)
 
-        if (procedimento.guardar()) {
-            dibujar(contextoPinta2, dienteXIndice2[procedimento.numeroDiente])
+        if (guardarDienteSeleccionado()) {
+            dibujar(contextoPinta2)
         } else {
             contextoPinta2.clearRect(0, 0, lienzo.width, lienzo.height)
             dibujarProcedimientosExistentes();
         }
-
     }
 
-    const dibujar = (contexto, indiceDienteParam) => {
-        let posY = 0
-        let indiceDiente = indiceDienteParam
-        if (indiceDiente < 16) posY = posEstandar.posicionYDienteInicial;
-        else {
-            indiceDiente -= 16;
+    const dibujar = (contexto) => {
+        let posY = posEstandar.posicionYDienteInicial
+
+        if (!numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente)) {
             posY = anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial;
         }
-        let posX
-        if (indiceDiente === 0) posX = posEstandar.margenXEntreDientes;
-        else posX = (indiceDiente * anchoDiente) + (2 * posEstandar.margenXEntreDientes * indiceDiente) + posEstandar.margenXEntreDientes;
 
-        contexto.strokeStyle = procedimento.color
-        contexto.fillStyle = procedimento.color
-        switch (procedimento.tipoProcedimiento) {
+        let posX
+        if (procedimentoSeleccionado.indice === 0) posX = posEstandar.margenXEntreDientes
+        else posX = (procedimentoSeleccionado.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimentoSeleccionado.indice) + posEstandar.margenXEntreDientes;
+
+        contexto.strokeStyle = procedimentoSeleccionado.color
+        contexto.fillStyle = procedimentoSeleccionado.color
+        switch (procedimentoSeleccionado.tipoProcedimiento) {
             case 'opcionPintarX':
                 pintandoX(contexto, posX, posY)
                 break;
@@ -307,11 +283,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 pintandoMedio(contexto, posX, posY)
                 break;
             case 'opcionPintarE':
-                if (indiceDienteParam < 16) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, 'E', 'end')
+                if (numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente)) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, 'E', 'end')
                 else pintandoLetra(contexto, posX, posY - posEstandar.margenXEntreDientes, 'E', 'end')
                 break;
             case 'opcionPintarY':
-                if (indiceDienteParam < 16) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, ' Y', 'start')
+                if (numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente)) pintandoLetra(contexto, posX, posY + anchoDiente + anchoDiente / 2.7, ' Y', 'start')
                 else pintandoLetra(contexto, posX, posY - posEstandar.margenXEntreDientes, ' Y', 'start')
                 break;
             case 'opcionPintarRelleno':
@@ -320,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pintar(contexto, posX, posY)
                 break;
             case 'opcionPintarDiente':
-                if (indiceDienteParam < 16) pintandoImagen(contexto, posX + anchoDiente / 2.3, posY - anchoDiente / 1.5)
+                if (numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente)) pintandoImagen(contexto, posX + anchoDiente / 2.3, posY - anchoDiente / 1.5)
                 else pintandoImagen(contexto, posX + anchoDiente / 2.3, posY + anchoDiente)
                 break;
         }
@@ -374,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pintar = (contexto, posX, posY) => {
         contexto.beginPath();
 
-        switch (procedimento.caraDiente) {
+        switch (procedimentoSeleccionado.caraDiente) {
             case 1:
                 contexto.moveTo(posX, posY);
                 contexto.lineTo(dimensionesTrapecio.baseMayor + posX, posY);
@@ -411,23 +387,20 @@ document.addEventListener('DOMContentLoaded', () => {
         contexto.stroke();
     }
 
-    const sombrearSecccionDiente = (contexto, ordenVisualizacionDiente) => {
+    const sombrearSecccionDiente = (contexto) => {
         contexto.lineWidth = 2
         contexto.fillStyle = '#fff'//relleno blanco
         // COLOR DE SOMBREADO
         contexto.strokeStyle = '#0B80CA';
-        let posicionY = 0
+        let posicionY = posEstandar.posicionYDienteInicial;
 
-        if (ordenVisualizacionDiente < 17) posicionY = posEstandar.posicionYDienteInicial;
-        else {
-            ordenVisualizacionDiente -= 16;
+        if (!numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente)) {
             posicionY = dimensionesTrapecio.baseMayor + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial;
         }
 
-        let posicionX
-
-        if (ordenVisualizacionDiente - 1 === 0) posicionX = posEstandar.margenXEntreDientes;
-        else posicionX = ((ordenVisualizacionDiente - 1) * anchoDiente) + (2 * posEstandar.margenXEntreDientes * (ordenVisualizacionDiente - 1)) + posEstandar.margenXEntreDientes;
+        let posicionX = posEstandar.margenXEntreDientes
+        if (procedimentoSeleccionado.indice != 0)
+            posicionX = (procedimentoSeleccionado.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimentoSeleccionado.indice) + posEstandar.margenXEntreDientes;
 
         pintar(contexto, posicionX, posicionY)
     }
@@ -440,40 +413,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    function getNumeroDiente(dientePorOrden, x, y) {
-        let ini,fin
+    const establecerDienteSeleccionado = (x, y) => {
+        let ini, fin
         if (y >= posEstandar.posicionYDienteInicial && y <= posEstandar.posicionYDienteInicial + anchoDiente) {
-            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente){
-                procedimento.indice = 0;
-                return dientePorOrden.indexOf(0)
+            if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente) {
+                procedimentoSeleccionado.indice = 0;
+                if (procedimentoSeleccionado.cuadroSeleccionado == 1 ? procedimentoSeleccionado.numeroDiente = numerosDientes.primero.at(0) : procedimentoSeleccionado.numeroDiente = numerosDientes.tercero.at(0));
             }
             // cambie por 2, estaba por 3
             else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 2) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
-                procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
-                ini = (procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes;
+                procedimentoSeleccionado.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
+                ini = (procedimentoSeleccionado.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimentoSeleccionado.indice) + posEstandar.margenXEntreDientes;
                 fin = ini + anchoDiente;
                 if (x >= ini && x <= fin) {
-                    return dientePorOrden.indexOf(procedimento.indice)
+                    if (procedimentoSeleccionado.cuadroSeleccionado == 1 ? procedimentoSeleccionado.numeroDiente = numerosDientes.primero.at(procedimentoSeleccionado.indice) :
+                        procedimentoSeleccionado.numeroDiente = numerosDientes.tercero.at(procedimentoSeleccionado.indice));
                 }
             }
         }
         else if (y >= (anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial) && y <= (2 * anchoDiente + posEstandar.margenYEntreDientes + posEstandar.posicionYDienteInicial)) {
             if (x >= posEstandar.margenXEntreDientes && x <= posEstandar.margenXEntreDientes + anchoDiente) {
-                procedimento.indice = 0;
-                return dientePorOrden.indexOf(16)
+                procedimentoSeleccionado.indice = 0;
+                if (procedimentoSeleccionado.cuadroSeleccionado == 1 ? procedimentoSeleccionado.numeroDiente = numerosDientes.segundo.at(0) : procedimentoSeleccionado.numeroDiente = numerosDientes.cuarto.at(0));
             } else if (x >= (anchoDiente + posEstandar.margenXEntreDientes * 3) && x <= (30 * posEstandar.margenXEntreDientes + 16 * anchoDiente)) {
-                procedimento.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
-                ini = (procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes;
+                procedimentoSeleccionado.indice = parseInt(x / (anchoDiente + 2 * posEstandar.margenXEntreDientes), 10);
+                ini = (procedimentoSeleccionado.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimentoSeleccionado.indice) + posEstandar.margenXEntreDientes;
                 fin = ini + anchoDiente;
-                if (x >= ini && x <= fin) return dientePorOrden.indexOf(procedimento.indice + 16)
+                if (x >= ini && x <= fin) {
+                    if (procedimentoSeleccionado.cuadroSeleccionado == 1 ? procedimentoSeleccionado.numeroDiente = numerosDientes.segundo.at(procedimentoSeleccionado.indice) :
+                        procedimentoSeleccionado.numeroDiente = numerosDientes.cuarto.at(procedimentoSeleccionado.indice));
+                }
             }
         }
     }
-    function getCaraDiente(dientePorOrden, x, y) {
-        let px = x - ((procedimento.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimento.indice) + posEstandar.margenXEntreDientes)
+
+    function getCaraDiente(x, y) {
+        let px = x - ((procedimentoSeleccionado.indice * anchoDiente) + (2 * posEstandar.margenXEntreDientes * procedimentoSeleccionado.indice) + posEstandar.margenXEntreDientes)
         let py = y - posEstandar.posicionYDienteInicial
 
-        if (dientePorOrden[procedimento.numeroDiente] + 1 > 16) py -= (posEstandar.margenYEntreDientes + anchoDiente)
+        if (!numerosDientes.esPrimeraFila(procedimentoSeleccionado.numeroDiente))
+            py -= (posEstandar.margenYEntreDientes + anchoDiente)
 
         if (py > 0 && py < (anchoDiente / 4) && px > py && py < anchoDiente - px) {
             return 1;
