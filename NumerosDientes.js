@@ -7,8 +7,12 @@ export class NumerosDientes {
 
     getIndice(num) {
         if(num < 29) return this.primero.indexOf(num);
-        if(num < 49) return this.segundo.indexOf(num) +16;
+        if(num < 49) return this.segundo.indexOf(num) ;
         if(num < 66) return this.tercero.indexOf(num);
-        return this.cuarto.indexOf(num)+16;
+        return this.cuarto.indexOf(num);
+    }
+    esPrimeraFila(numero){
+        return (this.primero.indexOf(numero) >=0 |this.tercero.indexOf(numero) >=0)
+
     }
 }
